@@ -1,5 +1,6 @@
 <script lang="ts">
   import Card from "../components/Card.svelte";
+    import Form from "../components/Form.svelte";
 
   let name: string = "redsylx";
 
@@ -19,6 +20,7 @@
 <input bind:value={multiplier}>
 <input bind:value={number}>
 <p class="text">{result}</p>
+<Form></Form>
 <style>
   :root {
     background-color: hsl(0, 80%, 5%);
