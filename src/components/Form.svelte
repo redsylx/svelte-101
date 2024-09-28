@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { onMount } from "svelte";
+  import { count } from "../store";
   interface IUser {
     username: string;
     age: number;
@@ -16,7 +18,8 @@
   const submitHandler = () => {
     if (userForm.username && userForm.age) {
       userArray = [...userArray, { ...userForm }];
-      userForm = { username: '', age: 0, isVerified: false }; // reset form
+      userForm = { username: '', age: 0, isVerified: false }; // reset form'
+      count.update((n) => n + 1)
     }
   };
 
@@ -29,18 +32,31 @@
     if (age < 20) return 'yellow';
     return 'red';
   };
+
+  onMount(() => {
+    userArray.push({ username: "ucup", age: 2, isVerified: false })
+    userArray.push({ username: "udin", age: 11, isVerified: false })
+    userArray.push({ username: "juki", age: 21, isVerified: false })
+    userArray.push({ username: "asep", age: 51, isVerified: false })
+    userArray = userArray
+    count.set(userArray.length)
+  })
 </script>
 
 <div class="container">
   <input bind:value={userForm.username} type="text" placeholder="Username" />
   <input bind:value={userForm.age} type="number" placeholder="Age" />
   <button on:click={submitHandler}>Add User</button>
+  <p class="text red">{$count}</p>
 
-  {#each userArray as user (user.username)}
+  {#each userArray as user, index (index)}
     <div class="containersmall {getUserClass(user.age)} {getUserClass(user.age) + 'border'}">
       <p class="text">{user.username}</p>
       <p class="text">{user.age} yo</p>
-      <button on:click={() => removeUser(user.username)}>Remove</button>
+      <button on:click={() => {
+        removeUser(user.username)
+        count.update((n) => n - 1);
+      }}>Remove</button>
     </div>
   {/each}
 </div>
