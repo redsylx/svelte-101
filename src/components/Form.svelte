@@ -1,4 +1,7 @@
 <script lang="ts">
+  import { fade, fly } from "svelte/transition";
+  import { flip } from 'svelte/animate';
+  import { send, receive } from '../transition';
   import { onMount } from "svelte";
   import { count } from "../store";
   interface IUser {
@@ -50,7 +53,7 @@
   <p class="text red">{$count}</p>
 
   {#each userArray as user, index (index)}
-    <div class="containersmall {getUserClass(user.age)} {getUserClass(user.age) + 'border'}">
+    <div animate:flip in:receive={{key: index}} out:send={{key: index}} class="containersmall {getUserClass(user.age)} {getUserClass(user.age) + 'border'}">
       <p class="text">{user.username}</p>
       <p class="text">{user.age} yo</p>
       <button on:click={() => {
