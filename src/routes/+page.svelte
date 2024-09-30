@@ -2,6 +2,7 @@
   import type { TransitionConfig } from "svelte/transition";
   import Card from "../components/Card.svelte";
   import Form from "../components/Form.svelte";
+    import VocabularyList from "../components/VocabularyList.svelte";
   
   let visible = false;
 
@@ -51,9 +52,11 @@
 		The quick brown fox jumps over the lazy dog
 	</p>
 {/if}
+
+<a href="/test">Test</a>
 <style>
   :root {
-    background-color: hsl(0, 80%, 5%);
+    background-color: hsl(0, 56%, 76%);
     padding: 20px 40px;
   }
 
