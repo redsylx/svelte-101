@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { getRandomNumber } from "$lib/random";
   import type { TransitionConfig } from "svelte/transition";
   import Card from "../components/Card.svelte";
   import Form from "../components/Form.svelte";
@@ -17,21 +18,27 @@
   $: console.log(`number     ${number}`);
 
   function typewriter(node: HTMLElement, { speed = 1 }: { speed?: number }): TransitionConfig {
-  if (node.childNodes.length !== 1 || node.childNodes[0].nodeType !== Node.TEXT_NODE) {
-    throw new Error(`This transition only works on elements with a single text node child`);
+    if (node.childNodes.length !== 1 || node.childNodes[0].nodeType !== Node.TEXT_NODE) {
+      throw new Error(`This transition only works on elements with a single text node child`);
+    }
+
+    const text = node.textContent || '';
+    const duration = text.length / (speed * 0.01);
+
+    return {
+      duration,
+      tick: (t: number) => {
+        const i = Math.trunc(text.length * t);
+        node.textContent = text.slice(0, i);
+      }
+    };
   }
 
-  const text = node.textContent || '';
-  const duration = text.length / (speed * 0.01);
+  let generatedNumber = 0;
 
-  return {
-    duration,
-    tick: (t: number) => {
-      const i = Math.trunc(text.length * t);
-      node.textContent = text.slice(0, i);
-    }
-  };
-}
+  const generateNumber = () => {
+    generatedNumber = getRandomNumber(1,100)
+  }
 </script>
 
 <p class="title">Welcome to SvelteKit</p>
@@ -54,6 +61,10 @@
 {/if}
 
 <a href="/test">Test</a>
+<label>
+  <button on:click={generateNumber}>GenerateNumber</button>
+  <a href="/{generatedNumber}">{generatedNumber}</a>
+</label>
 <style>
   :root {
     background-color: hsl(0, 56%, 76%);
